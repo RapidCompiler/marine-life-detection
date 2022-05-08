@@ -13,6 +13,9 @@
 # I added my own method of drawing boxes and labels using OpenCV.
 
 # Import packages
+from twilio.rest import Client
+import os
+from dotenv import load_dotenv
 import os
 import argparse
 import cv2
@@ -21,6 +24,12 @@ import sys
 import importlib.util
 import time
 
+load_dotenv()
+
+account_sid = os.getenv('ACCOUNT_SID') 
+auth_token = os.getenv('AUTH_TOKEN')
+
+client = Client(account_sid, auth_token) 
 
 
 # Define and parse input arguments
@@ -190,11 +199,21 @@ while(video.isOpened()):
 
     if fish > 5:
         print("School of fish detected")
+        message = client.messages.create(
+            from_='whatsapp:+14155238886',
+            body='School of fish detected!',
+            to='whatsapp:+918754613534'
+        )
 
     if jfish > 0:
         print("Jellyfish detected")
 
     if shark and sharkProb > 75:
+        message = client.messages.create(
+            from_='whatsapp:+14155238886',
+            body='Possible shark sighted!',
+            to='whatsapp:+918754613534'
+        )
         print("Shark detected")
     
     
